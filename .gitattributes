@@ -1,2 +1,4 @@
+# Set ccpt language to lua
+ccpt linguist-language=lua
 # Auto detect text files and perform LF normalization
 * text=auto
