@@ -1,0 +1,14 @@
+{
+    name = "testpackage2",
+    comment = "Emtpy package to test cctp",
+    author = "PentagonLP",
+    website = "https://github.com/PentagonLP/ccpt",
+    newestversion = "1.0",
+    dependencies = {
+    },
+    install = {
+        url = "https://raw.githubusercontent.com/PentagonLP/properprint/main/properprint",
+		filename = "testpackage2",
+		type = "library",
+    }
+}

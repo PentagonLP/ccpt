@@ -1,7 +1,10 @@
 {
     packages = {
         ccpt = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/packageinfo.ccpt",
-        pprint = "https://raw.githubusercontent.com/PentagonLP/properprint/main/packageinfo.ccpt"
+        pprint = "https://raw.githubusercontent.com/PentagonLP/properprint/main/packageinfo.ccpt",
+		tp1 = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/testing/testpackage1",
+		tp2 = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/testing/testpackage2",
+		tp3 = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/testing/testpackage3"
     },
     ccptversion = "1.0"
 }
