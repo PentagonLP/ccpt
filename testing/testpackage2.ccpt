@@ -3,7 +3,7 @@
     comment = "Emtpy package to test cctp",
     author = "PentagonLP",
     website = "https://github.com/PentagonLP/ccpt",
-    newestversion = "1.1",
+    newestversion = "1.0",
     dependencies = {
     },
     install = {

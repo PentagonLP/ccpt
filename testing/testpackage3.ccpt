@@ -3,9 +3,8 @@
     comment = "Emtpy package to test cctp",
     author = "PentagonLP",
     website = "https://github.com/PentagonLP/ccpt",
-    newestversion = "1.2",
+    newestversion = "1.0",
     dependencies = {
-		tp1 = "1.2"
     },
     install = {
         url = "https://raw.githubusercontent.com/PentagonLP/properprint/main/properprint",
