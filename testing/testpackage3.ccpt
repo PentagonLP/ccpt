@@ -5,6 +5,7 @@
     website = "https://github.com/PentagonLP/ccpt",
     newestversion = "1.2",
     dependencies = {
+		tp1 = "1.1"
     },
     install = {
         url = "https://raw.githubusercontent.com/PentagonLP/properprint/main/properprint",
