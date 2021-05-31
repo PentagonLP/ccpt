@@ -1,0 +1,7 @@
+{
+    packages = {
+        ccpt = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/packageinfo.ccpt",
+        pprint = "https://raw.githubusercontent.com/PentagonLP/properprint/main/packageinfo.ccpt"
+    },
+    ccptversion = "1.0"
+}
