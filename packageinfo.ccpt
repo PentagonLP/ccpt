@@ -10,6 +10,6 @@
     },
     install = {
         type = "script",
-        scripturl = ""
+        scripturl = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/ccptinstall.lua"
     }
 }
