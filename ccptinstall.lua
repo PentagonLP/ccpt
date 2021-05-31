@@ -73,7 +73,7 @@ end
 	@return Table|boolean result|error: The result of the request; If the URL is not reachable, an error is printed in the terminal and boolean false is returned
 --]]
 function gethttpresult(url)
-	if not http.checkURL(defaultpackageurl) then
+	if not http.checkURL(url) then
 		print("ERROR: Url '" .. url .. "' is blocked in config. Unable to fetch data.")
 		return false
 	end
@@ -83,20 +83,6 @@ function gethttpresult(url)
 		return false
 	end
 	return result
-end
-
---[[ Gets table from HTTP URL
-	@param String url: The desired URL
-	@return Table|boolean result|error: The content of the site parsed into a table; If the URL is not reachable, an error is printed in the terminal and boolean false is returned
---]]
-function gethttpdata(url)
-	result = gethttpresult(url)
-	if result == false then 
-		return false
-	end
-	data = result.readAll()
-	data = string.gsub(data,"\n","")
-	return textutils.unserialize(data)
 end
 
 --[[ Download file HTTP URL
@@ -110,6 +96,16 @@ function downloadfile(filepath,url)
 		return false
 	end
 	storeFile(filepath,result.readAll())
+end
+
+-- MISC HELPER FUNCTIONS --
+--[[ Checks wether a String starts with another one
+	@param String haystack: String to check wether is starts with another one
+	@param String needle: String to check wether another one starts with it
+	@return boolean result: Wether the firest String starts with the second one
+]]--
+function startsWith(haystack,needle)
+	return string.sub(haystack,1,string.len(needle))==needle
 end
 
 -- MAIN PROGRAMM --
@@ -146,8 +142,13 @@ elseif args[1]=="remove" then
 	fs.delete("/ccpt")
 	fs.delete("/.ccpt")
 	shell.setCompletionFunction("ccpt", nil)
-	print("[Installer] Successfully uninstalled 'ccpt'!")
+	print("[Installer] Removing 'ccpt' from startup...")
+	if file_exists("startup") and startsWith(startup,"-- ccpt: Seach for updates\nshell.run(\"ccpt\",\"startup\")") then
+		print("[Installer] Removing 'ccpt' from startup...")
+		startup = readFile("startup","")
+		storeFile("startup",string.sub(startup,56))
+	end
 	print("[Installer] So long, and thanks for all the fish!")
 else
-	print("Invalid argument: " .. args[1])
+	print("[Installer] Invalid argument: " .. args[1])
 end
