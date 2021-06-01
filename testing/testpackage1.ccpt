@@ -1,6 +1,6 @@
 {
-    name = "testpackage1",
-    comment = "Emtpy package to test cctp",
+    name = "testpackage",
+    comment = "This package does absolutly nothing!",
     author = "PentagonLP",
     website = "https://github.com/PentagonLP/ccpt",
     newestversion = "1.0",
