@@ -416,7 +416,7 @@ function upgradepackage(packageid,packageinfo)
 	end
 	
 	installedpackages = readData("/.ccpt/installedpackages",true)
-	if installedpackages==packageinfo["newestversion"] then
+	if installedpackages[packageid]==packageinfo["newestversion"] then
 		properprint.pprint("'" .. packageid .. "' already updated! Skipping... (This is NOT an error)")
 	else
 		properprint.pprint("Updating '" .. packageid .. "' (" .. installedpackages[packageid] .. "->" .. packageinfo["newestversion"] .. ")...")
