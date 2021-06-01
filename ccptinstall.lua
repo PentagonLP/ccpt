@@ -1,3 +1,10 @@
+--[[ 
+	ComputerCraft Package Tool Installer
+	Author: PentagonLP
+	Version: 1.0
+	Lines of Code: 161; Characters: 5541
+]]
+
 -- Read arguments
 args = {...}
 
@@ -142,7 +149,6 @@ elseif args[1]=="remove" then
 	fs.delete("/ccpt")
 	fs.delete("/.ccpt")
 	shell.setCompletionFunction("ccpt", nil)
-	print("[Installer] Removing 'ccpt' from startup...")
 	if file_exists("startup") and startsWith(startup,"-- ccpt: Seach for updates\nshell.run(\"ccpt\",\"startup\")") then
 		print("[Installer] Removing 'ccpt' from startup...")
 		startup = readFile("startup","")
