@@ -3,7 +3,7 @@
     comment = "This package does absolutly nothing!",
     author = "PentagonLP",
     website = "https://github.com/PentagonLP/ccpt",
-    newestversion = "1.0",
+    newestversion = "1.1",
     dependencies = {
 		testpackage2 = "1.0"
     },
