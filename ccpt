@@ -764,6 +764,91 @@ function boom()
 	print("....\"Have you exploded today?\"...")
 end
 
+-- TAB AUTOCOMLETE HELPER FUNCTIONS --
+--[[ Add Text to result array if it fits
+	@param String option: Autocomplete option to check
+	@param String texttocomplete: The already typed in text to.. complete...
+	@param Table result: Array to add the option to if it passes the check
+]]--
+function addtoresultifitfits(option,texttocomplete,result)
+	if startsWith(option,texttocomplete) then
+		result[#result+1] = string.sub(option,#texttocomplete+1)
+	end
+	return result
+end
+
+-- Functions to complete different subcommands of a command
+-- Complete action (eg. "update" or "list")
+function completeaction(curText)
+	result = {}
+	for i,v in pairs(actions) do
+		if (not (v["comment"] == nil)) then
+			result = addtoresultifitfits(i,curText,result)
+		end
+	end
+	return result
+end
+
+-- Complete packageid (filter can be nil to display all, "installed" to only recommend installed packages or "not installed" to only recommend not installed packages)
+autocompletepackagecache = {}
+function completepackageid(curText,filterstate)
+	result = {}
+	if curText=="" or curText==nil then
+		packagedata = readData("/.ccpt/packagedata",false)
+		if not packagedata then
+			return {}
+		end
+		autocompletepackagecache = packagedata
+	end
+	if not (filterstate==nil) then
+		installedversion = readData("/.ccpt/installedpackages",true)
+	end
+	for i,v in pairs(autocompletepackagecache) do
+		if filterstate=="installed" then
+			if not (installedversion[i]==nil) then
+				result = addtoresultifitfits(i,curText,result)
+			end
+		elseif filterstate=="not installed" then
+			if installedversion[i]==nil then
+				result = addtoresultifitfits(i,curText,result)
+			end
+		else
+			result = addtoresultifitfits(i,curText,result)
+		end
+	end
+	return result
+end
+
+-- Complete packageid, but only for custom packages, which is much simpler
+function completecustompackageid(curText)
+	result = {}
+	custompackages = readData("/.ccpt/custompackages",true)
+	for i,v in pairs(custompackages) do
+		result = addtoresultifitfits(i,curText,result)
+	end
+	return result
+end
+
+--[[ Recursive function to go through the 'autocomplete' array and complete commands accordingly
+	@param Table lookup: Part of the 'autocomplete' array to look autocomplete up in
+	@param String lastText: Numeric array of parameters before the current one
+	@param String curText: The already typed in text to.. complete...
+	@param int iterator: Last position in the lookup array
+	@return Table completeoptions: Availible complete options
+]]--
+function tabcompletehelper(lookup,lastText,curText,iterator)
+	if lookup[lastText[iterator]]==nil then
+		return {}
+	end
+	if #lastText==iterator then
+		return lookup[lastText[iterator]]["func"](curText,unpack(lookup[lastText[iterator]]["funcargs"]))
+	elseif lookup[lastText[iterator]]["next"]==nil then
+		return {}
+	else
+		return tabcompletehelper(lookup[lastText[iterator]]["next"],lastText,curText,iterator+1)
+	end
+end
+
 -- CONFIG ARRAYS --
 --[[ Array to store subcommands, help comment and function
 ]]--
@@ -860,93 +945,7 @@ autocomplete = {
 	}
 }
 
--- TAB AUTOCOMLETE FUNCTIONS --
---[[ Add Text to result array if it fits
-	@param String option: Autocomplete option to check
-	@param String texttocomplete: The already typed in text to.. complete...
-	@param Table result: Array to add the option to if it passes the check
-]]--
-function addtoresultifitfits(option,texttocomplete,result)
-	if startsWith(option,texttocomplete) then
-		result[#result+1] = string.sub(option,#texttocomplete+1)
-	end
-	return result
-end
-
--- Functions to complete different subcommands of a command
--- Complete action (eg. "update" or "list")
-function completeaction(curText)
-	result = {}
-	for i,v in pairs(actions) do
-		if (not (v["comment"] == nil)) then
-			result = addtoresultifitfits(i,curText,result)
-		end
-	end
-	return result
-end
-
--- Complete packageid (filter can be nil to display all, "installed" to only recommend installed packages or "not installed" to only recommend not installed packages)
-autocompletepackagecache = {}
-function completepackageid(curText,filterstate)
-	result = {}
-	if curText=="" or curText==nil then
-		packagedata = readData("/.ccpt/packagedata",false)
-		if not packagedata then
-			return {}
-		end
-		autocompletepackagecache = packagedata
-	end
-	if not (filterstate==nil) then
-		installedversion = readData("/.ccpt/installedpackages",true)
-	end
-	for i,v in pairs(autocompletepackagecache) do
-		if filterstate=="installed" then
-			if not (installedversion[i]==nil) then
-				result = addtoresultifitfits(i,curText,result)
-			end
-		elseif filterstate=="not installed" then
-			if installedversion[i]==nil then
-				result = addtoresultifitfits(i,curText,result)
-			end
-		else
-			result = addtoresultifitfits(i,curText,result)
-		end
-	end
-	return result
-end
-
--- Complete packageid, but only for custom packages, which is much simpler
-function completecustompackageid(curText)
-	result = {}
-	custompackages = readData("/.ccpt/custompackages",true)
-	for i,v in pairs(custompackages) do
-		result = addtoresultifitfits(i,curText,result)
-	end
-	return result
-end
-
---[[ Recursive function to go through the 'autocomplete' array and complete commands accordingly
-	@param Table lookup: Part of the 'autocomplete' array to look autocomplete up in
-	@param String lastText: Numeric array of parameters before the current one
-	@param String curText: The already typed in text to.. complete...
-	@param int iterator: Last position in the lookup array
-	@return Table completeoptions: Availible complete options
-]]--
-function tabcompletehelper(lookup,lastText,curText,iterator)
-	if lookup[lastText[iterator]]==nil then
-		return {}
-	end
-	if #lastText==iterator then
-		return lookup[lastText[iterator]]["func"](curText,unpack(lookup[lastText[iterator]]["funcargs"]))
-	elseif lookup[lastText[iterator]]["next"]==nil then
-		return {}
-	else
-		return tabcompletehelper(lookup[lastText[iterator]]["next"],lastText,curText,iterator+1)
-	end
-end
-
---[[ Main autocomplete function, documentation see computercraft wiki
-]]--
+-- MAIN AUTOCOMLETE FUNCTION --
 function tabcomplete(shell, parNumber, curText, lastText)
 	result = {}
 	tabcompletehelper(
