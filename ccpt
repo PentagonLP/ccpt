@@ -2,7 +2,7 @@
 	ComputerCraft Package Tool
 	Author: PentagonLP
 	Version: 1.0
-	Lines of Code: 1.000; Characters: 30.485
+	Lines of Code: 1.000; Characters: 30.508
 ]]
 
 -- Load properprint library
@@ -187,7 +187,6 @@ function checkforupdates(installedpackages,reducedprint)
 			packageswithupdates[#packageswithupdates+1] = k
 		end
 	end
-	
 	-- Print result
 	if #packageswithupdates==0 then
 		bprint("All installed packages are up to date!",reducedprint)
