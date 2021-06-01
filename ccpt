@@ -2,7 +2,7 @@
 	ComputerCraft Package Tool
 	Author: PentagonLP
 	Version: 1.0
-	Lines of Code: 1.000; Characters: 30.514
+	Lines of Code: 1.000; Characters: 30.485
 ]]
 
 -- Load properprint library
@@ -921,7 +921,8 @@ installtypes = {
 	}
 }
 
--- Array to store autocomplete information
+--[[ Array to store autocomplete information
+]]--
 autocomplete = {
 	func = completeaction,
 	funcargs = {},
