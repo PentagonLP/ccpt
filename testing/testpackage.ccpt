@@ -5,9 +5,10 @@
     website = "https://github.com/PentagonLP/ccpt",
     newestversion = "1.0",
     dependencies = {
+		testpackage2 = 1.0
     },
     install = {
-        url = "https://raw.githubusercontent.com/PentagonLP/properprint/main/properprint",
+        url = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/testing/testscript",
 		filename = "testpackage1",
 		type = "library",
     }
