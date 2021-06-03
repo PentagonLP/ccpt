@@ -2,7 +2,6 @@
 	ComputerCraft Package Tool
 	Author: PentagonLP
 	Version: 1.0
-	Lines of Code: 1.000; Characters: 30.508
 ]]
 
 -- Load properprint library
@@ -187,6 +186,7 @@ function checkforupdates(installedpackages,reducedprint)
 			packageswithupdates[#packageswithupdates+1] = k
 		end
 	end
+	
 	-- Print result
 	if #packageswithupdates==0 then
 		bprint("All installed packages are up to date!",reducedprint)
@@ -292,10 +292,19 @@ function update(startup)
 	-- Read installed packages
 	bprint("Reading Installed Packages...",startup)
 	installedpackages = readData("/.ccpt/installedpackages",true)
+	installedpackagesnew = {}
+	for k,v in pairs(installedpackages) do
+		if packagedata[k]==nil then
+			properprint.pprint("Package '" .. k .. "' was removed from the packagelist, but is installed. It will no longer be marked as 'installed', but its files won't be deleted.")
+		else
+			installedpackagesnew[k] = v
+		end
+	end
+	storeData("/.ccpt/installedpackages",installedpackagesnew)
 	bprint("Data update complete!",startup)
 	
 	-- Check for updates
-	checkforupdates(installedpackages,startup)
+	checkforupdates(installedpackagesnew,startup)
 end
 
 -- Install
