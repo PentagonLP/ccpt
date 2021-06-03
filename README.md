@@ -134,8 +134,20 @@ This prints name, author, description, website (if given), installation type, in
     alt="missing image :("
     src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/ccpt_info.png"
 /><br>
+
+### **9. Display help**
+```
+ccpt help
+```
+This prints all availible actions for the 'ccpt' command.  
  
-### **9. Display current 'ccpt'-version**
+*The Output should look something like this:*
+<br><img
+    alt="missing image :("
+    src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/ccpt_help.png"
+/><br>
+
+### **10. Display current 'ccpt'-version**
 ```
 ccpt version
 ```
