@@ -9,16 +9,14 @@
 ![size](https://img.shields.io/github/languages/code-size/PentagonLP/ccpt)
 ![files](https://img.shields.io/github/directory-file-count/PentagonLP/ccpt)
 ![languages](https://img.shields.io/github/languages/count/PentagonLP/ccpt)<br>
+### Package Tool for the Minecraft mod "*ComputerCraft/CC: Tweaked*"  
 <br><img
     alt="missing image :("
     src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/social-preview.gif"
 /><br>
 
-
-Package Tool for the Minecraft mod **ComputerCraft/CC: Tweaked**  
-
 ## Features
-The package tool is built after the Linux package tool '[apt/apt-get](https://salsa.debian.org/apt-team/apt)'. It has simular features as apt-get, but for ComputerCraft. You can **install a default set of packages** from online sources, or **register your own packages**. It deals with **dependencies** *(eg. Package A is dependend on package B, so if you install package A the tool will also install package B)* and it automaticly **checks for updates**; If updates are availible, you can **install them with one command**.<br>
+The package tool is built after the Linux package tool '[apt/apt-get](https://salsa.debian.org/apt-team/apt)'. It has simular features as apt-get, but for ComputerCraft. You can **install a default set of packages** from online sources, or **register your own packages**. It deals with **dependencies** *(eg. Package A is dependend on package B, so if you install package A the tool will also install package B)* and it automaticly **checks for updates**; If updates are availible, you can **install them with one command**. This package tool was created to make all of that **as simple to do as possible**.<br>
 
 At the moment, the list of default packages is very small. **If you are a developer and you want to register your own program, please read the '[How to apply for the default package list for one of your packages](https://github.com/PentagonLP/ccpt/wiki/How-to-apply-for-the-default-package-list-for-one-of-your-packages)' wiki article.**
 ## How to install 
