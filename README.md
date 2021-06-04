@@ -9,6 +9,11 @@
 ![size](https://img.shields.io/github/languages/code-size/PentagonLP/ccpt)
 ![files](https://img.shields.io/github/directory-file-count/PentagonLP/ccpt)
 ![languages](https://img.shields.io/github/languages/count/PentagonLP/ccpt)<br>
+<br><img
+    alt="missing image :("
+    src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/social-preview.gif"
+/><br>
+
 
 Package Tool for the Minecraft mod **ComputerCraft/CC: Tweaked**  
 
