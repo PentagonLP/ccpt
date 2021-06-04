@@ -2,7 +2,7 @@
 name: Apply for default package list
 about: Apply for the default package list for one of your packages
 title: "[Apply for DPL]"
-labels: apply for default package list
+labels: apply for DPL
 assignees: ''
 
 ---
@@ -20,3 +20,6 @@ If you are now asking yourself: "What is a 'packageinfo.ccpt'-file?", then you s
 
 **Suggested package ID**
 You may suggest an ID for your package under which your package will be able to be installed, please make sure that it isn't already taken (eg by issuing the command 'ccpt info <Your ID>'). We can't gurantee though if this ID will be the final one.
+
+[Please don't change the text below this line]  
+"The community is encouraged to discuss wether this package meets the requirements listed [here](https://github.com/PentagonLP/ccpt/wiki/How-to-apply-for-the-default-package-list-for-one-of-your-packages) and wether it should end up on the Default Package List. This way, you can help us and the user that applied by pointing out potential issues and ultimately speed up the prcess! Thank you!" ~PentagonLP

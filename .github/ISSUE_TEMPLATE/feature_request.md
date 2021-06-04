@@ -7,6 +7,8 @@ assignees: ''
 
 ---
 
+**This template is for submitting features that are already quite elaborated. If you just have a vague idea, please take a look in the ["Discussions" idea tab](https://github.com/PentagonLP/ccpt/discussions/categories/ideas).**
+
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
