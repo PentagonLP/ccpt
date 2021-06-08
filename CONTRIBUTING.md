@@ -18,19 +18,19 @@ ccpt
 | - packageinfo.ccpt: packageinfo file for ccpt  
 |  
 | - .github: Github-related files  
-|   | - ISSUE_TEMPLATES: Templates to create issues  
+|   \ - ISSUE_TEMPLATES: Templates to create issues  
 |       | - apply-for-default-package-list.md: Template for applying for DPL  
 |       | - bug_report.md: Template for applying for reporting a bug  
-|       | - feature_request.md: Template for requesting a feature  
+|       \ - feature_request.md: Template for requesting a feature  
 |  
 | - img: Images for Github presence  
 |   | - (images used in readme)  
 |   | - social-preview.gif: Social preview picture (Updating this does not automaticly change the social preview picture!)  
-|   | - work: Folder to store image presets like backgrounds and unexported gimp files  
-|       | - (raw image files and gimp files to reuse in new images)  
+|   \ - work: Folder to store image presets like backgrounds and unexported gimp files  
+|       \ - (raw image files and gimp files to reuse in new images)  
 |  
-| - testing: Test data to test CCPT's features  
-|   | - (different packageinfo files and other files only used for testing CCPT's features without habing to use real packages)
+\ - testing: Test data to test CCPT's features  
+    \ - (different packageinfo files and other files only used for testing CCPT's features without habing to use real packages)
 ```
 
 ## Code structure
@@ -58,4 +58,6 @@ ccpt
 --]]
 ```
 - All functions that don't just do one thing (eg. reading a file or writing something in console) but follow different steps, one after the other (like first fetch a file, then store it somewhere) to achive a result, must have these different steps commented.
+## Dealing with issues
+The first thing to do when dealing with an issue is always to write a comment that you are dealing with the issue so that no issue is dealt with by two people at the same time!
 ## Process applies for default package list
