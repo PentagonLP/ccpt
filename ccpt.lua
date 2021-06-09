@@ -255,6 +255,10 @@ function arraytostring(array,iterator)
 	return result
 end
 
+function regexEscape(str)
+	return str:gsub("[%(%)%.%%%+%-%*%?%[%^%$%]]", "%%%1")
+end
+
 -- COMMAND FUNCTIONS --
 -- Update
 --[[ Get packageinfo from the internet and search from updates
@@ -967,13 +971,19 @@ function tabcomplete(shell, parNumber, curText, lastText)
 end
 
 -- MAIN PROGRAM --
+
+-- Add to working path
+if string.find(shell.path(),regexEscape(":.ccpt/program"))==nil then
+	shell.setPath(shell.path()..":.ccpt/program")
+end
+
 -- Register autocomplete function
-shell.setCompletionFunction("ccpt", tabcomplete)
+shell.setCompletionFunction(".ccpt/program/ccpt", tabcomplete)
 
 -- Add to startup file to run at startup
 startup = readFile("startup","") or ""
-if string.find(startup,"shell.run(\".ccpt/program/ccpt.lua\",\"startup\")",1,true)==nil then
-	startup = "-- ccpt: Seach for updates\nshell.run(\".ccpt/program/ccpt.lua\",\"startup\")\n\n" .. startup
+if string.find(startup,"shell.run(\".ccpt/program/ccpt\",\"startup\")",1,true)==nil then
+	startup = "-- ccpt: Seach for updates\nshell.run(\".ccpt/program/ccpt\",\"startup\")\n\n" .. startup
 	storeFile("startup",startup)
 	print("[Installer] Startup entry created!")
 end
