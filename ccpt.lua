@@ -741,14 +741,14 @@ end
 function version()
 	-- Count lines
 	linecount = 0
-	for _ in io.lines'ccpt' do
+	for _ in io.lines'.ccpt/program/ccpt' do
 		linecount = linecount + 1
 	end
 	-- Print version
 	properprint.pprint("ComputerCraft Package Tool")
 	properprint.pprint("by PentagonLP")
 	properprint.pprint("Version: 1.0")
-	properprint.pprint(linecount .. " lines of code containing " .. #readFile("ccpt",nil) .. " Characters.")
+	properprint.pprint(linecount .. " lines of code containing " .. #readFile(".ccpt/program/ccpt",nil) .. " Characters.")
 end
 
 -- Idk randomly appeared one day
@@ -972,8 +972,8 @@ shell.setCompletionFunction("ccpt", tabcomplete)
 
 -- Add to startup file to run at startup
 startup = readFile("startup","") or ""
-if not startsWith(startup,"-- ccpt: Seach for updates\nshell.run(\"ccpt\",\"startup\")") then
-	startup = "-- ccpt: Seach for updates\nshell.run(\"ccpt\",\"startup\")\n\n" .. startup
+if string.find(startup,"shell.run(\".ccpt/program/ccpt.lua\",\"startup\")",1,true)==nil then
+	startup = "-- ccpt: Seach for updates\nshell.run(\".ccpt/program/ccpt.lua\",\"startup\")\n\n" .. startup
 	storeFile("startup",startup)
 	print("[Installer] Startup entry created!")
 end
