@@ -114,6 +114,10 @@ function startsWith(haystack,needle)
 	return string.sub(haystack,1,string.len(needle))==needle
 end
 
+function regexEscape(str)
+	return str:gsub("[%(%)%.%%%+%-%*%?%[%^%$%]]", "%%%1")
+end
+
 toInstall = {
 	pprint = {
 		url = "https://raw.githubusercontent.com/PentagonLP/properprint/main/properprint",
@@ -128,8 +132,8 @@ toInstall = {
 		path = "lib/httputils"
 	},
 	ccpt = {
-		url = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/ccpt",
-		path = "ccpt"
+		url = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/ccpt.lua",
+		path = ".ccpt/program/ccpt"
 	}
 }
 
@@ -145,7 +149,7 @@ if (args[1]=="install") or (args[1]==nil) then
 		print("[Installer] Successfully installed '" .. k .. "'!")
 	end
 	print("[Installer] Running 'ccpt update'...")
-	shell.run("ccpt","update")
+	shell.run(".ccpt/program/ccpt","update")
 	print("[Installer] Reading package data...")
 	packagedata = readData("/.ccpt/packagedata")
 	print("[Installer] Storing installed packages...")
@@ -157,18 +161,20 @@ if (args[1]=="install") or (args[1]==nil) then
 	print("[Installer] Install of 'ccpt' finished!")
 elseif args[1]=="update" then
 	print("[Installer] Updating 'ccpt'...")
-	if downloadfile("ccpt","https://raw.githubusercontent.com/PentagonLP/ccpt/main/ccpt")==false then
+	if downloadfile(".ccpt/program/ccpt","https://raw.githubusercontent.com/PentagonLP/ccpt/main/ccpt")==false then
 		return false
 	end
 elseif args[1]=="remove" then
 	print("[Installer] Uninstalling 'ccpt'...")
-	fs.delete("/ccpt")
 	fs.delete("/.ccpt")
 	shell.setCompletionFunction("ccpt", nil)
-	if file_exists("startup") and startsWith(startup,"-- ccpt: Seach for updates\nshell.run(\"ccpt\",\"startup\")") then
+	shell.setPath(string.gsub(shell.path(),regexEscape(":.ccpt/program","")))
+	if file_exists("startup") then
 		print("[Installer] Removing 'ccpt' from startup...")
 		startup = readFile("startup","")
-		storeFile("startup",string.sub(startup,56))
+		startup = string.gsub(startup,regexEscape("-- ccpt: Search for updates"), "")
+		startup = string.gsub(startup,regexEscape("shell.run(\".ccpt/program/ccpt\",\"startup\")"), "")
+		storeFile("startup",startup)
 	end
 	print("[Installer] So long, and thanks for all the fish!")
 else
