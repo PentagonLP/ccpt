@@ -1,8 +1,7 @@
 --[[ 
 	ComputerCraft Package Tool Installer
 	Author: PentagonLP
-	Version: 1.0
-	Lines of Code: 161; Characters: 5541
+	Version: 1.1
 ]]
 
 -- Read arguments
@@ -115,30 +114,47 @@ function startsWith(haystack,needle)
 	return string.sub(haystack,1,string.len(needle))==needle
 end
 
+toInstall = {
+	pprint = {
+		url = "https://raw.githubusercontent.com/PentagonLP/properprint/main/properprint",
+		path = "lib/properprint"
+	},
+	fileutils = {
+		url = "https://raw.githubusercontent.com/PentagonLP/fileutils/main/fileutils",
+		path = "lib/fileutils"
+	},
+	httputils = {
+		url = "https://raw.githubusercontent.com/PentagonLP/httputils/main/httputils",
+		path = "lib/httputils"
+	},
+	ccpt = {
+		url = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/ccpt",
+		path = "ccpt"
+	}
+}
+
 -- MAIN PROGRAMM --
 if (args[1]=="install") or (args[1]==nil) then
 	print("[Installer] Well, hello there!")
 	print("[Installer] Thank you for downloading the ComputerCraft Package Tool! Installing...")
-	print("[Installer] Installing 'properprint' library...")
-	if downloadfile("lib/properprint","https://raw.githubusercontent.com/PentagonLP/properprint/main/properprint")== false then
-		return false
+	for k,v in pairs(toInstall) do
+		print("[Installer] Installing '" .. k .. "'...")
+		if downloadfile(v["path"],v["url"])== false then
+			return false
+		end
+		print("[Installer] Successfully installed '" .. k .. "'!")
 	end
-	print("[Installer] Successfully installed 'properprint'!")
-	print("[Installer] Installing 'ccpt'...")
-	if downloadfile("ccpt","https://raw.githubusercontent.com/PentagonLP/ccpt/main/ccpt")==false then
-		return false
-	end
-	print("[Installer] Successfully installed 'ccpt'!")
 	print("[Installer] Running 'ccpt update'...")
 	shell.run("ccpt","update")
 	print("[Installer] Reading package data...")
 	packagedata = readData("/.ccpt/packagedata")
 	print("[Installer] Storing installed packages...")
-	storeData("/.ccpt/installedpackages",{
-		ccpt = packagedata["ccpt"]["newestversion"],
-		pprint = packagedata["pprint"]["newestversion"]
-	})
-	print("[Installer] 'ccpt' successfully installed!")
+	installedpackages = {}
+	for k,v in pairs(toInstall) do
+		installedpackages[k] = packagedata[k]["newestversion"]
+	end
+	storeData("/.ccpt/installedpackages",installedpackages)
+	print("[Installer] Install of 'ccpt' finished!")
 elseif args[1]=="update" then
 	print("[Installer] Updating 'ccpt'...")
 	if downloadfile("ccpt","https://raw.githubusercontent.com/PentagonLP/ccpt/main/ccpt")==false then
