@@ -6,6 +6,10 @@
 
 -- Load properprint library
 os.loadAPI("lib/properprint")
+-- Load fileutils library
+os.loadAPI("lib/fileutils")
+-- Load httputils library
+os.loadAPI("lib/httputils")
 
 -- Read arguments
 args = {...}
@@ -18,124 +22,13 @@ installed = 0
 updated = 0
 removed = 0
 
--- FILE MANIPULATION FUNCTIONS --
---[[ Checks if file exists
-	@param String filepath: Filepath to check
-	@return boolean: Does the file exist?
---]]
-function file_exists(filepath)
-	local f=io.open(filepath,"r")
-	if f~=nil then 
-		io.close(f) 
-		return true 
-	else 
-		return false 
-	end
-end
-
---[[ Stores a file in a desired location
-	@param String filepath: Filepath where to create file (if file already exists, it gets overwritten)
-	@param String content: Content to store in file
---]]
-function storeFile(filepath,content)
-	writefile = fs.open(filepath,"w")
-	writefile.write(content)
-	writefile.close()
-end
-
---[[ Reads a file from a desired location
-	@param String filepath: Filepath to the file to read
-	@param String createnew: (Optional) Content to store in new file and return if file does not exist. Can be nil.
-	@return String|boolean content|error: Content of the file; If createnew is nil and file doesn't exist boolean false is returned
---]]
-function readFile(filepath,createnew)
-	readfile = fs.open(filepath,"r")
-	if readfile == nil then
-		if not (createnew==nil) then
-			storeFile(filepath,createnew)
-			return createnew
-		else
-			return false
-		end
-	end
-	content = readfile.readAll()
-	readfile.close()
-	return content
-end
-
---[[ Stores a table in a file
-	@param String filepath: Filepath where to create file (if file already exists, it gets overwritten)
-	@param Table data: Table to store in file
---]]
-function storeData(filepath,data)
-	storeFile(filepath,textutils.serialize(data):gsub("\n",""))
-end
-
---[[ Reads a table from a file in a desired location
-	@param String filepath: Filepath to the file to read
-	@param boolean createnew: If true, an empty table is stored in new file and returned if file does not exist.
-	@return Table|boolean content|error: Table thats stored in the file; If createnew is false and file doesn't exist boolean false is returned
---]]
-function readData(filepath,createnew)
-	if createnew then
-		return textutils.unserialize(readFile(filepath,textutils.serialize({}):gsub("\n","")))
-	else
-		return textutils.unserialize(readFile(filepath,nil))
-	end
-end
-
--- HTTP FETCH FUNCTIONS --
---[[ Gets result of HTTP URL
-	@param String url: The desired URL
-	@return Table|boolean result|error: The result of the request; If the URL is not reachable, an error is printed in the terminal and boolean false is returned
---]]
-function gethttpresult(url)
-	if not http.checkURL(defaultpackageurl) then
-		properprint.pprint("ERROR: Url '" .. url .. "' is blocked in config. Unable to fetch data.")
-		return false
-	end
-	result = http.get(url)
-	if result == nil then
-		properprint.pprint("ERROR: Unable to reach '" .. url .. "'")
-		return false
-	end
-	return result
-end
-
---[[ Gets table from HTTP URL
-	@param String url: The desired URL
-	@return Table|boolean result|error: The content of the site parsed into a table; If the URL is not reachable, an error is printed in the terminal and boolean false is returned
---]]
-function gethttpdata(url)
-	result = gethttpresult(url)
-	if result == false then 
-		return false
-	end
-	data = result.readAll()
-	data = string.gsub(data,"\n","")
-	return textutils.unserialize(data)
-end
-
---[[ Download file HTTP URL
-	@param String filepath: Filepath where to create file (if file already exists, it gets overwritten)
-	@param String url: The desired URL
-	@return nil|boolean nil|error: nil; If the URL is not reachable, an error is printed in the terminal and boolean false is returned
---]]
-function downloadfile(filepath,url)
-	result = gethttpresult(url)
-	if result == false then 
-		return false
-	end
-	storeFile(filepath,result.readAll())
-end
-
 -- PACKAGE FUNCTIONS --
 --[[ Checks wether a package is installed
 	@param String packageid: The ID of the package
 	@return boolean installed: Is the package installed?
 ]]--
 function isinstalled(packageid)
-	return not (readData("/.ccpt/installedpackages",true)[packageid] == nil)
+	return not (fileutils.readData("/.ccpt/installedpackages",true)[packageid] == nil)
 end
 
 --[[ Checks wether a package is installed
@@ -144,7 +37,7 @@ end
 ]]--
 function getpackagedata(packageid)
 	-- Read package data
-	allpackagedata = readData("/.ccpt/packagedata",false)
+	allpackagedata = fileutils.readData("/.ccpt/packagedata",false)
 	-- Is the package data built yet?
 	if allpackagedata==false then
 		properprint.pprint("Package Date is not yet built. Please execute 'ccpt update' first. If this message still apears, thats a bug, please report.")
@@ -157,7 +50,7 @@ function getpackagedata(packageid)
 		return false
 	end
 	-- Is the package installed?
-	installedversion = readData("/.ccpt/installedpackages",true)[packageid]
+	installedversion = fileutils.readData("/.ccpt/installedpackages",true)[packageid]
 	if not (installedversion==nil) then
 		packagedata["status"] = "installed"
 		packagedata["installedversion"] = installedversion
@@ -175,7 +68,7 @@ end
 function checkforupdates(installedpackages,reducedprint)
 	-- If parameters are nil, load defaults
 	reducedprint = reducedprint or false
-	installedpackages = installedpackages or readData("/.ccpt/installedpackages",true)
+	installedpackages = installedpackages or fileutils.readData("/.ccpt/installedpackages",true)
 	
 	bprint("Checking for updates...",reducedprint)
 	
@@ -268,13 +161,13 @@ function update(startup)
 	startup = startup or false
 	-- Fetch default Packages
 	bprint("Fetching Default Packages...",startup)
-	packages = gethttpdata(defaultpackageurl)["packages"]
+	packages = httputils.gethttpdata(defaultpackageurl)["packages"]
 	if defaultpackages==false then 
 		return
 	end
 	-- Load custom packages
 	bprint("Reading Custom packages...",startup)
-	custompackages = readData("/.ccpt/custompackages",true)
+	custompackages = fileutils.readData("/.ccpt/custompackages",true)
 	-- Add Custom Packages to overall package list
 	for k,v in pairs(custompackages) do
 		packages[k] = v
@@ -284,7 +177,7 @@ function update(startup)
 	packagedata = {}
 	for k,v in pairs(packages) do
 		bprint("Downloading package data of '" .. k .. "'...",startup)
-		packageinfo = gethttpdata(v)
+		packageinfo = httputils.gethttpdata(v)
 		if not (packageinfo==false) then
 			packagedata[k] = packageinfo
 		else
@@ -292,10 +185,10 @@ function update(startup)
 		end
 	end
 	bprint("Storing package data of all packages...",startup)
-	storeData("/.ccpt/packagedata",packagedata)
+	fileutils.storeData("/.ccpt/packagedata",packagedata)
 	-- Read installed packages
 	bprint("Reading Installed Packages...",startup)
-	installedpackages = readData("/.ccpt/installedpackages",true)
+	installedpackages = fileutils.readData("/.ccpt/installedpackages",true)
 	installedpackagesnew = {}
 	for k,v in pairs(installedpackages) do
 		if packagedata[k]==nil then
@@ -304,7 +197,7 @@ function update(startup)
 			installedpackagesnew[k] = v
 		end
 	end
-	storeData("/.ccpt/installedpackages",installedpackagesnew)
+	fileutils.storeData("/.ccpt/installedpackages",installedpackagesnew)
 	bprint("Data update complete!",startup)
 	
 	-- Check for updates
@@ -351,7 +244,7 @@ function installpackage(packageid,packageinfo)
 	-- Install dependencies
 	properprint.pprint("Installing dependencies of '" .. packageid .. "', if there are any...")
 	for k,v in pairs(packageinfo["dependencies"]) do
-		installedpackages = readData("/.ccpt/installedpackages",true)
+		installedpackages = fileutils.readData("/.ccpt/installedpackages",true)
 		if installedpackages[k] == nil then
 			if installpackage(k,nil)==false then
 				return false
@@ -370,9 +263,9 @@ function installpackage(packageid,packageinfo)
 	if result==false then
 		return false
 	end
-	installedpackages = readData("/.ccpt/installedpackages",true)
+	installedpackages = fileutils.readData("/.ccpt/installedpackages",true)
 	installedpackages[packageid] = packageinfo["newestversion"]
-	storeData("/.ccpt/installedpackages",installedpackages)
+	fileutils.storeData("/.ccpt/installedpackages",installedpackages)
 	print("'" .. packageid .. "' successfully installed!")
 	installed = installed+1
 end
@@ -380,14 +273,14 @@ end
 --[[ Different install methodes
 ]]--
 function installlibrary(installdata)
-	result = downloadfile("lib/" .. installdata["filename"],installdata["url"])
+	result = httputils.downloadfile("lib/" .. installdata["filename"],installdata["url"])
 	if result==false then
 		return false
 	end
 end
 
 function installscript(installdata)
-	result = downloadfile("/.ccpt/tempinstaller",installdata["scripturl"])
+	result = httputils.downloadfile("/.ccpt/tempinstaller",installdata["scripturl"])
 	if result==false then
 		return false
 	end
@@ -399,7 +292,7 @@ end
 -- Upgrade installed Packages
 -- TODO: Single package updates
 function upgrade()
-	packageswithupdates = checkforupdates(readData("/.ccpt/installedpackages",true),false)
+	packageswithupdates = checkforupdates(fileutils.readData("/.ccpt/installedpackages",true),false)
 	if packageswithupdates==false then
 		return
 	end
@@ -427,7 +320,7 @@ function upgradepackage(packageid,packageinfo)
 		end
 	end
 	
-	installedpackages = readData("/.ccpt/installedpackages",true)
+	installedpackages = fileutils.readData("/.ccpt/installedpackages",true)
 	if installedpackages[packageid]==packageinfo["newestversion"] then
 		properprint.pprint("'" .. packageid .. "' already updated! Skipping... (This is NOT an error)")
 		return true
@@ -438,7 +331,7 @@ function upgradepackage(packageid,packageinfo)
 	-- Install/Update dependencies
 	properprint.pprint("Updating or installing new dependencies of '" .. packageid .. "', if there are any...")
 	for k,v in pairs(packageinfo["dependencies"]) do
-		installedpackages = readData("/.ccpt/installedpackages",true)
+		installedpackages = fileutils.readData("/.ccpt/installedpackages",true)
 		if installedpackages[k] == nil then
 			if installpackage(k,nil)==false then
 				return false
@@ -457,9 +350,9 @@ function upgradepackage(packageid,packageinfo)
 	if result==false then
 		return false
 	end
-	installedpackages = readData("/.ccpt/installedpackages",true)
+	installedpackages = fileutils.readData("/.ccpt/installedpackages",true)
 	installedpackages[packageid] = packageinfo["newestversion"]
-	storeData("/.ccpt/installedpackages",installedpackages)
+	fileutils.storeData("/.ccpt/installedpackages",installedpackages)
 	print("'" .. packageid .. "' successfully updated!")
 	updated = updated+1
 end
@@ -467,7 +360,7 @@ end
 --[[ Different install methodes require different update methodes
 ]]--
 function updatescript(installdata)
-	result = downloadfile("/.ccpt/tempinstaller",installdata["scripturl"])
+	result = httputils.downloadfile("/.ccpt/tempinstaller",installdata["scripturl"])
 	if result==false then
 		return false
 	end
@@ -493,7 +386,7 @@ function uninstall()
 	end
 	
 	-- Check witch package(s) to remove (A package dependend on a package that's about to get removed is also removed)
-	packagestoremove = getpackagestoremove(args[2],packageinfo,readData("/.ccpt/installedpackages",true),{})
+	packagestoremove = getpackagestoremove(args[2],packageinfo,fileutils.readData("/.ccpt/installedpackages",true),{})
 	packagestoremovestring = ""
 	for k,v in pairs(packagestoremove) do
 		if not (k==args[2]) then
@@ -540,9 +433,9 @@ function uninstall()
 		if result==false then
 			return false
 		end
-		installedpackages = readData("/.ccpt/installedpackages",true)
+		installedpackages = fileutils.readData("/.ccpt/installedpackages",true)
 		installedpackages[k] = nil
-		storeData("/.ccpt/installedpackages",installedpackages)
+		fileutils.storeData("/.ccpt/installedpackages",installedpackages)
 		print("'" .. k .. "' successfully uninstalled!")
 		removed = removed+1
 	end
@@ -581,7 +474,7 @@ function removelibrary(installdata)
 end
 
 function removescript(installdata)
-	result = downloadfile("/.ccpt/tempinstaller",installdata["scripturl"])
+	result = httputils.downloadfile("/.ccpt/tempinstaller",installdata["scripturl"])
 	if result==false then
 		return false
 	end
@@ -602,16 +495,16 @@ function add()
 		properprint.pprint("Incomplete command, missing: 'Packageinfo URL'; Syntax: 'ccpt add <PackageID> <PackageinfoURL>'")
 		return
 	end
-	custompackages = readData("/.ccpt/custompackages",true)
+	custompackages = fileutils.readData("/.ccpt/custompackages",true)
 	if not (custompackages[args[2]]==nil) then
 		properprint.pprint("A custom package with the id '" .. args[2] .. "' already exists! Please choose a different one.")
 		return
 	end
-	if not file_exists("/.ccpt/packagedata") then
+	if not fileutils.file_exists("/.ccpt/packagedata") then
 		properprint.pprint("Package Date is not yet built. Please execute 'ccpt update' first. If this message still apears, thats a bug, please report.")
 	end
 	-- Overwrite default packages?
-	if not (readData("/.ccpt/packagedata",true)[args[2]]==nil) then
+	if not (fileutils.readData("/.ccpt/packagedata",true)[args[2]]==nil) then
 		properprint.pprint("A package with the id '" .. args[2] .. "' already exists! This package will be overwritten if you proceed. Do you want to proceed? [y/n]:")
 		if not ynchoice() then
 			return
@@ -619,7 +512,7 @@ function add()
 	end
 	-- Add entry in custompackages file
 	custompackages[args[2]] = args[3]
-	storeData("/.ccpt/custompackages",custompackages)
+	fileutils.storeData("/.ccpt/custompackages",custompackages)
 	properprint.pprint("Custom package successfully added!")
 	-- Update packagedata?
 	properprint.pprint("Do you want to update the package data ('cctp update')? Your custom package won't be able to be installed until updating. [y/n]:")
@@ -637,7 +530,7 @@ function remove()
 		properprint.pprint("Incomplete command, missing: 'Package ID'; Syntax: 'ccpt remove <PackageID>'")
 		return
 	end
-	custompackages = readData("/.ccpt/custompackages",true)
+	custompackages = fileutils.readData("/.ccpt/custompackages",true)
 	if custompackages[args[2]]==nil then
 		properprint.pprint("A custom package with the id '" .. args[2] .. "' does not exist!")
 		return
@@ -650,7 +543,7 @@ function remove()
 	end
 	-- Remove entry from custompackages file
 	custompackages[args[2]] = nil
-	storeData("/.ccpt/custompackages",custompackages)
+	fileutils.storeData("/.ccpt/custompackages",custompackages)
 	properprint.pprint("Custom package successfully removed!")
 	-- Update packagedata?
 	properprint.pprint("Do you want to update the package data ('cctp update')? Your custom package will still be able to be installed/updated/uninstalled until updating. [y/n]:")
@@ -693,13 +586,13 @@ end
 function list()
 	-- Read data
 	print("Reading all packages data...")
-	if not file_exists("/.ccpt/packagedata") then
+	if not fileutils.file_exists("/.ccpt/packagedata") then
 		properprint.pprint("No Packages found. Please run 'cctp update' first.'")
 		return
 	end
-	packagedata = readData("/.ccpt/packagedata",true)
+	packagedata = fileutils.readData("/.ccpt/packagedata",true)
 	print("Reading Installed packages...")
-	installedpackages = readData("/.ccpt/installedpackages",true)
+	installedpackages = fileutils.readData("/.ccpt/installedpackages",true)
 	-- Print list
 	properprint.pprint("List of all known Packages:")
 	for k,v in pairs(installedpackages) do
@@ -752,7 +645,7 @@ function version()
 	properprint.pprint("ComputerCraft Package Tool")
 	properprint.pprint("by PentagonLP")
 	properprint.pprint("Version: 1.0")
-	properprint.pprint(linecount .. " lines of code containing " .. #readFile(".ccpt/program/ccpt",nil) .. " Characters.")
+	properprint.pprint(linecount .. " lines of code containing " .. #fileutils.readFile(".ccpt/program/ccpt",nil) .. " Characters.")
 end
 
 -- Idk randomly appeared one day
@@ -807,14 +700,14 @@ autocompletepackagecache = {}
 function completepackageid(curText,filterstate)
 	result = {}
 	if curText=="" or curText==nil then
-		packagedata = readData("/.ccpt/packagedata",false)
+		packagedata = fileutils.readData("/.ccpt/packagedata",false)
 		if not packagedata then
 			return {}
 		end
 		autocompletepackagecache = packagedata
 	end
 	if not (filterstate==nil) then
-		installedversion = readData("/.ccpt/installedpackages",true)
+		installedversion = fileutils.readData("/.ccpt/installedpackages",true)
 	end
 	for i,v in pairs(autocompletepackagecache) do
 		if filterstate=="installed" then
@@ -835,7 +728,7 @@ end
 -- Complete packageid, but only for custom packages, which is much simpler
 function completecustompackageid(curText)
 	result = {}
-	custompackages = readData("/.ccpt/custompackages",true)
+	custompackages = fileutils.readData("/.ccpt/custompackages",true)
 	for i,v in pairs(custompackages) do
 		result = addtoresultifitfits(i,curText,result)
 	end
@@ -981,10 +874,10 @@ end
 shell.setCompletionFunction(".ccpt/program/ccpt", tabcomplete)
 
 -- Add to startup file to run at startup
-startup = readFile("startup","") or ""
+startup = fileutils.readFile("startup","") or ""
 if string.find(startup,"shell.run(\".ccpt/program/ccpt\",\"startup\")",1,true)==nil then
-	startup = "-- ccpt: Search for updates\nshell.run(\".ccpt/program/ccpt\",\"startup\")\n\n" .. startup
-	storeFile("startup",startup)
+	startup = "-- ccpt: Seach for updates\nshell.run(\".ccpt/program/ccpt\",\"startup\")\n\n" .. startup
+	fileutils.storeFile("startup",startup)
 	print("[Installer] Startup entry created!")
 end
 
