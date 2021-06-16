@@ -6,6 +6,8 @@
 
 -- Read arguments
 args = {...}
+-- Read branch or use main
+args[2] = args[2] or "main"
 
 -- FILE MANIPULATION FUNCTIONS --
 --[[ Checks if file exists
@@ -132,7 +134,7 @@ toInstall = {
 		path = "lib/httputils"
 	},
 	ccpt = {
-		url = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/ccpt.lua",
+		url = "https://raw.githubusercontent.com/PentagonLP/ccpt/" .. args[2] .. "/ccpt.lua",
 		path = ".ccpt/program/ccpt"
 	}
 }
