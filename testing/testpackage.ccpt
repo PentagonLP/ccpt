@@ -6,6 +6,7 @@
     newestversion = "1.1",
     dependencies = {
 		testpackage2 = "1.1"
+		testpackage3 = "1.0"
     },
     install = {
         url = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/testing/testscript",
