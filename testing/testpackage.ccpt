@@ -5,12 +5,12 @@
     website = "https://github.com/PentagonLP/ccpt",
     newestversion = "1.1",
     dependencies = {
-		testpackage2 = "1.1"
+		testpackage2 = "1.1",
 		testpackage3 = "1.0"
     },
     install = {
         url = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/testing/testscript",
 		filename = "testpackage1",
-		type = "library",
+		type = "library"
     }
 }
