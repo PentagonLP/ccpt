@@ -151,7 +151,7 @@ if (args[1]=="install") or (args[1]==nil) then
 		print("[Installer] Successfully installed '" .. k .. "'!")
 	end
 	print("[Installer] Running 'ccpt update'...")
-	shell.run(".ccpt/program/ccpt","update")
+	shell.run(toInstall["ccpt"]["path"],"update")
 	print("[Installer] Reading package data...")
 	packagedata = readData("/.ccpt/packagedata")
 	print("[Installer] Storing installed packages...")
@@ -163,7 +163,7 @@ if (args[1]=="install") or (args[1]==nil) then
 	print("[Installer] Install of 'ccpt' finished!")
 elseif args[1]=="update" then
 	print("[Installer] Updating 'ccpt'...")
-	if downloadfile(".ccpt/program/ccpt","https://raw.githubusercontent.com/PentagonLP/ccpt/main/ccpt")==false then
+	if downloadfile(toInstall["ccpt"]["path"],toInstall["ccpt"]["url"])==false then
 		return false
 	end
 elseif args[1]=="remove" then
