@@ -26,7 +26,7 @@ end
 --]]
 local function readFile(filepath,createnew)
 	local readfile = fs.open(filepath,"r")
-	if not then
+	if not readfile then
 		if not (createnew==nil) then
 			storeFile(filepath,createnew)
 			return createnew
