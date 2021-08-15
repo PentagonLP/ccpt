@@ -89,6 +89,7 @@ local function downloadfile(filepath,url)
 		return false
 	end
 	storeFile(filepath,result.readAll())
+	return true
 end
 
 -- MISC HELPER FUNCTIONS --
