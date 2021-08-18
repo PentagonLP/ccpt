@@ -1,35 +1,21 @@
 --[[ 
 	ComputerCraft Package Tool Installer
-	Author: PentagonLP
+	Authors: PentagonLP, SkyTheCodeMaster
 	Version: 1.1
 ]]
 
 -- Read arguments
-args = {...}
+local args = {...}
 -- Read branch or use main
 args[2] = args[2] or "main"
 
 -- FILE MANIPULATION FUNCTIONS --
---[[ Checks if file exists
-	@param String filepath: Filepath to check
-	@return boolean: Does the file exist?
---]]
-function file_exists(filepath)
-	local f=io.open(filepath,"r")
-	if f~=nil then 
-		io.close(f) 
-		return true 
-	else 
-		return false 
-	end
-end
-
 --[[ Stores a file in a desired location
 	@param String filepath: Filepath where to create file (if file already exists, it gets overwritten)
 	@param String content: Content to store in file
 --]]
-function storeFile(filepath,content)
-	writefile = fs.open(filepath,"w")
+local function storeFile(filepath,content)
+	local writefile = fs.open(filepath,"w")
 	writefile.write(content)
 	writefile.close()
 end
@@ -39,9 +25,9 @@ end
 	@param String createnew: (Optional) Content to store in new file and return if file does not exist. Can be nil.
 	@return String|boolean content|error: Content of the file; If createnew is nil and file doesn't exist boolean false is returned
 --]]
-function readFile(filepath,createnew)
-	readfile = fs.open(filepath,"r")
-	if readfile == nil then
+local function readFile(filepath,createnew)
+	local readfile = fs.open(filepath,"r")
+	if not readfile then
 		if not (createnew==nil) then
 			storeFile(filepath,createnew)
 			return createnew
@@ -49,7 +35,7 @@ function readFile(filepath,createnew)
 			return false
 		end
 	end
-	content = readfile.readAll()
+	local content = readfile.readAll()
 	readfile.close()
 	return content
 end
@@ -58,7 +44,7 @@ end
 	@param String filepath: Filepath where to create file (if file already exists, it gets overwritten)
 	@param Table data: Table to store in file
 --]]
-function storeData(filepath,data)
+local function storeData(filepath,data)
 	storeFile(filepath,textutils.serialize(data):gsub("\n",""))
 end
 
@@ -67,7 +53,7 @@ end
 	@param boolean createnew: If true, an empty table is stored in new file and returned if file does not exist.
 	@return Table|boolean content|error: Table thats stored in the file; If createnew is false and file doesn't exist boolean false is returned
 --]]
-function readData(filepath,createnew)
+local function readData(filepath,createnew)
 	if createnew then
 		return textutils.unserialize(readFile(filepath,textutils.serialize({}):gsub("\n","")))
 	else
@@ -80,14 +66,14 @@ end
 	@param String url: The desired URL
 	@return Table|boolean result|error: The result of the request; If the URL is not reachable, an error is printed in the terminal and boolean false is returned
 --]]
-function gethttpresult(url)
+local function gethttpresult(url)
 	if not http.checkURL(url) then
 		print("ERROR: Url '" .. url .. "' is blocked in config. Unable to fetch data.")
 		return false
 	end
-	result = http.get(url)
-	if result == nil then
-		print("ERROR: Unable to reach '" .. url .. "'")
+	local result,err = http.get(url)
+	if not result then
+		print("ERROR: Unable to reach '" .. url .. "' because '" .. err .. "'")
 		return false
 	end
 	return result
@@ -96,14 +82,15 @@ end
 --[[ Download file HTTP URL
 	@param String filepath: Filepath where to create file (if file already exists, it gets overwritten)
 	@param String url: The desired URL
-	@return nil|boolean nil|error: nil; If the URL is not reachable, an error is printed in the terminal and boolean false is returned
+	@return boolean error: If the URL is not reachable, an error is printed in the terminal and boolean false is returned; If everything goes well, true is returned
 --]]
-function downloadfile(filepath,url)
-	result = gethttpresult(url)
-	if result == false then 
+local function downloadfile(filepath,url)
+	local result = gethttpresult(url)
+	if not result then 
 		return false
 	end
 	storeFile(filepath,result.readAll())
+	return true
 end
 
 -- MISC HELPER FUNCTIONS --
@@ -112,15 +99,15 @@ end
 	@param String needle: String to check wether another one starts with it
 	@return boolean result: Wether the firest String starts with the second one
 ]]--
-function startsWith(haystack,needle)
+local function startsWith(haystack,needle)
 	return string.sub(haystack,1,string.len(needle))==needle
 end
 
-function regexEscape(str)
+local function regexEscape(str)
 	return str:gsub("[%(%)%.%%%+%-%*%?%[%^%$%]]", "%%%1")
 end
 
-toInstall = {
+local toInstall = {
 	pprint = {
 		url = "https://raw.githubusercontent.com/PentagonLP/properprint/main/properprint",
 		path = "lib/properprint"
@@ -130,7 +117,7 @@ toInstall = {
 		path = "lib/fileutils"
 	},
 	httputils = {
-		url = "https://raw.githubusercontent.com/PentagonLP/httputils/main/httputils",
+		url = "https://raw.githubusercontent.com/PentagonLP/httputils/main/httputils.lua",
 		path = "lib/httputils"
 	},
 	ccpt = {
@@ -145,7 +132,7 @@ if (args[1]=="install") or (args[1]==nil) then
 	print("[Installer] Thank you for downloading the ComputerCraft Package Tool! Installing...")
 	for k,v in pairs(toInstall) do
 		print("[Installer] Installing '" .. k .. "'...")
-		if downloadfile(v["path"],v["url"])== false then
+		if not downloadfile(v["path"],v["url"]) then
 			return false
 		end
 		print("[Installer] Successfully installed '" .. k .. "'!")
@@ -153,9 +140,9 @@ if (args[1]=="install") or (args[1]==nil) then
 	print("[Installer] Running 'ccpt update'...")
 	shell.run(toInstall["ccpt"]["path"],"update")
 	print("[Installer] Reading package data...")
-	packagedata = readData("/.ccpt/packagedata")
+	local packagedata = readData("/.ccpt/packagedata")
 	print("[Installer] Storing installed packages...")
-	installedpackages = {}
+	local installedpackages = {}
 	for k,v in pairs(toInstall) do
 		installedpackages[k] = packagedata[k]["newestversion"]
 	end
@@ -163,7 +150,8 @@ if (args[1]=="install") or (args[1]==nil) then
 	print("[Installer] Install of 'ccpt' finished!")
 elseif args[1]=="update" then
 	print("[Installer] Updating 'ccpt'...")
-	if downloadfile(toInstall["ccpt"]["path"],toInstall["ccpt"]["url"])==false then
+	fs.delete("/ccpt")
+	if not downloadfile(toInstall["ccpt"]["path"],toInstall["ccpt"]["url"]) then
 		return false
 	end
 elseif args[1]=="remove" then
@@ -171,9 +159,9 @@ elseif args[1]=="remove" then
 	fs.delete("/.ccpt")
 	shell.setCompletionFunction("ccpt", nil)
 	shell.setPath(string.gsub(shell.path(),regexEscape(":.ccpt/program","")))
-	if file_exists("startup") then
+	if fs.exists("startup") then
 		print("[Installer] Removing 'ccpt' from startup...")
-		startup = readFile("startup","")
+		local startup = readFile("startup","")
 		startup = string.gsub(startup,regexEscape("-- ccpt: Search for updates"), "")
 		startup = string.gsub(startup,regexEscape("shell.run(\".ccpt/program/ccpt\",\"startup\")"), "")
 		storeFile("startup",startup)
