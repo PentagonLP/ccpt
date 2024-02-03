@@ -115,17 +115,61 @@ function startsWith(haystack,needle)
 	return string.sub(haystack,1,string.len(needle))==needle
 end
 
+-- Github Functions --
+--[[ Gets the contents of the lib directory
+	@return Table|boolean contents|error: The contents of the lib directory; If the URL is not reachable, an error is printed in the terminal and boolean false is returned]]
+local function GetDirContents()
+	local contents = gethttpresult("https://api.github.com/repos/hpf3/ccpt/contents/src/lib")
+	if contents == false then
+		return false
+	end
+	return textutils.unserializeJSON(contents.readAll())
+end
+
+--[[ Downloads all files in the lib directory
+	@return boolean result: Wether the download was successful
+]]--
+local function GetLibs()
+	local contents = GetDirContents()
+	if contents == false then
+		return false
+	end
+	local libs = {}
+	for i=1,#contents do
+		if contents[i]["type"]=="file" then
+			if downloadfile("/lib/ccpt/"..contents[i]["name"],contents[i]["download_url"]) == false then
+				return false
+			end
+		end
+	end
+	return true
+end
+
+local function RemLibs()
+	local contents = GetDirContents()
+	if contents == false then
+		return false
+	end
+	for i=1,#contents do
+		if contents[i]["type"]=="file" then
+			fs.delete("/lib/ccpt/"..contents[i]["name"])
+		end
+	end
+end
 -- MAIN PROGRAMM --
 if (args[1]=="install") or (args[1]==nil) then
 	print("[Installer] Well, hello there!")
 	print("[Installer] Thank you for downloading the ComputerCraft Package Tool! Installing...")
 	print("[Installer] Installing 'properprint' library...")
-	if downloadfile("lib/properprint","https://raw.githubusercontent.com/hpf3/properprint/main/properprint")== false then
+	if downloadfile("/lib/properprint","https://raw.githubusercontent.com/hpf3/properprint/main/properprint")== false then
 		return false
 	end
 	print("[Installer] Successfully installed 'properprint'!")
 	print("[Installer] Installing 'ccpt'...")
 	if downloadfile("ccpt","https://raw.githubusercontent.com/hpf3/ccpt/main/ccpt")==false then
+		return false
+	end
+	if GetLibs() == false then
 		return false
 	end
 	print("[Installer] Successfully installed 'ccpt'!")
@@ -144,10 +188,14 @@ elseif args[1]=="update" then
 	if downloadfile("ccpt","https://raw.githubusercontent.com/hpf3/ccpt/main/ccpt")==false then
 		return false
 	end
+	if GetLibs() == false then
+		return false
+	end
 elseif args[1]=="remove" then
 	print("[Installer] Uninstalling 'ccpt'...")
 	fs.delete("/ccpt")
 	fs.delete("/.ccpt")
+	RemLibs()
 	shell.setCompletionFunction("ccpt", nil)
 	if file_exists("startup") and startsWith(startup,"-- ccpt: Seach for updates\nshell.run(\"ccpt\",\"startup\")") then
 		print("[Installer] Removing 'ccpt' from startup...")
