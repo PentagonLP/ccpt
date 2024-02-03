@@ -5,7 +5,7 @@
 ]]
 
 -- Load properprint library
-local properprint = require("lib/properprint")
+local properprint = require("lib.properprint")
 
 -- Read arguments
 args = {...}
