@@ -5,7 +5,7 @@
 ]]
 
 -- Load properprint library
-os.loadAPI("lib/properprint")
+local properprint = require("lib/properprint")
 
 -- Read arguments
 args = {...}
