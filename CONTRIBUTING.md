@@ -13,7 +13,7 @@ ccpt
 | - LICENSE: License file under which ccpt is published   
 | - README.md: Readme file for this repo  
 | - ccpt: Main code file for CCPT (lua)  
-| - ccptinstall.lua: Installer for CCPT (also hosted on pastebin) (lua)  
+| - ccptinstall.lua: Installer for CCPT (lua)  
 | - defaultpackages.ccpt: List of default packages able to be installed  
 | - packageinfo.ccpt: packageinfo file for ccpt  
 |  

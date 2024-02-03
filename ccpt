@@ -11,7 +11,7 @@ os.loadAPI("lib/properprint")
 args = {...}
 
 -- Link to a list of packages that are present by default (used in 'update()')
-defaultpackageurl = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/defaultpackages.ccpt"
+defaultpackageurl = "https://raw.githubusercontent.com/hpf3/ccpt/main/defaultpackages.ccpt"
 
 -- Counters to print out at the very end
 installed = 0

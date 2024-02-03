@@ -1,32 +1,41 @@
 # ComputerCraft Package Tool (CCPT)
 ![projectstage](https://img.shields.io/badge/project%20stage-alpha-yellow)
 ![projectstage](https://img.shields.io/badge/version-1.0-yellow)
-[![license](https://img.shields.io/github/license/PentagonLP/ccpt)](https://github.com/PentagonLP/ccpt/blob/main/LICENSE)
-[![issues](https://img.shields.io/github/issues/PentagonLP/ccpt)](https://github.com/PentagonLP/ccpt/issues)<br>
-[![contributors](https://img.shields.io/github/contributors/PentagonLP/ccpt)](https://github.com/PentagonLP/ccpt/graphs/contributors)
-[![activity](https://img.shields.io/github/commit-activity/m/PentagonLP/ccpt)](https://github.com/PentagonLP/ccpt/commits/main)
-[![lastcommit](https://img.shields.io/github/last-commit/PentagonLP/ccpt)](https://github.com/PentagonLP/ccpt/commits/main)<br>
-![size](https://img.shields.io/github/languages/code-size/PentagonLP/ccpt)
-![files](https://img.shields.io/github/directory-file-count/PentagonLP/ccpt)
-![languages](https://img.shields.io/github/languages/count/PentagonLP/ccpt)<br>
+[![license](https://img.shields.io/github/license/hpf3/ccpt)](https://github.com/hpf3/ccpt/blob/main/LICENSE)
+[![issues](https://img.shields.io/github/issues/hpf3/ccpt)](https://github.com/hpf3/ccpt/issues)<br>
+[![contributors](https://img.shields.io/github/contributors/hpf3/ccpt)](https://github.com/hpf3/ccpt/graphs/contributors)
+[![activity](https://img.shields.io/github/commit-activity/m/hpf3/ccpt)](https://github.com/hpf3/ccpt/commits/main)
+[![lastcommit](https://img.shields.io/github/last-commit/hpf3/ccpt)](https://github.com/hpf3/ccpt/commits/main)<br>
+![size](https://img.shields.io/github/languages/code-size/hpf3/ccpt)
+![files](https://img.shields.io/github/directory-file-count/hpf3/ccpt)
+![languages](https://img.shields.io/github/languages/count/hpf3/ccpt)<br>
 ### Package Tool for the Minecraft mod "*ComputerCraft/CC: Tweaked*"  
 <br><img
     alt="missing image :("
-    src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/social-preview.gif"
+    src="https://raw.githubusercontent.com/hpf3/ccpt/main/img/social-preview.gif"
 /><br>
+
+# NOTICE
+I (hpf3) am unnoficially working on this project as i wanted something like it for personal use, but the original repo hasn't updated in a few years and there are changes i want to make.
+
+Do not report issues with this version of the project to the original project.
+
+original: https://github.com/PentagonLP/ccpt
+
+
 
 ## Features
 The package tool is built after the Linux package tool '[apt/apt-get](https://salsa.debian.org/apt-team/apt)'. It has simular features as apt-get, but for ComputerCraft. You can **install a default set of packages** from online sources, or **register your own packages**. It deals with **dependencies** *(eg. Package A is dependend on package B, so if you install package A the tool will also install package B)* and it automaticly **checks for updates**; If updates are availible, you can **install them with one command**. This package tool was created to make all of that **as simple to do as possible**.<br>
 
-At the moment, the list of default packages is very small. **If you are a developer and you want to register your own program, please read the '[How to apply for the default package list for one of your packages](https://github.com/PentagonLP/ccpt/wiki/How-to-apply-for-the-default-package-list-for-one-of-your-packages)' wiki article.**
+At the moment, the list of default packages is very small. **If you are a developer and you want to register your own program, please read the '[How to apply for the default package list for one of your packages](https://github.com/hpf3/ccpt/wiki/How-to-apply-for-the-default-package-list-for-one-of-your-packages)' wiki article.**
 ## How to install 
 The installer is hosted on [pastebin.com](https://pastebin.com). Therefore, you can install the tool with one command:
 ```
-pastebin run syAUmLaF
+wget run https://raw.githubusercontent.com/hpf3/ccpt/main/ccptinstall.lua
 ```
-**Attention:** The default 'pastebin'-program does no longer work reliably on **1.7.10 or older**! You can fix the issue by downloading and installing [this](https://github.com/SquidDev-CC/FAQBot-CC/raw/786214ba08d8ccc7cbd11eb1d921e82327dee9a8/etc/cc-pastebin-fix.zip) resourcepack, or, if you are playing on a server, ask your admin to install it in the server directory. **You have to restart your game/server for it to work!**  
+ 
 
-Alternativly, you can manually download the [ccptinstall.lua](https://github.com/PentagonLP/ccpt/blob/main/ccptinstall.lua)-file, put it in your computers working directory and execute it.
+Alternativly, you can manually download the [ccptinstall.lua](https://github.com/hpf3/ccpt/blob/main/ccptinstall.lua)-file, put it in your computers working directory and execute it.
 ## How to use
 This program is a one-command-program. To use it, type:
 ```
@@ -44,7 +53,7 @@ This fetches the list of default packages and properties of all packages, local 
 *The Output should look something like this:*
 <br><img
     alt="missing image :("
-    src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/ccpt_update.png"
+    src="https://raw.githubusercontent.com/hpf3/ccpt/main/img/ccpt_update.png"
 /><br>
 
 ### **2. Install a package**
@@ -57,7 +66,7 @@ This installes the package with the id <packageid>, including all the packages i
 *The Output should look something like this:*
 <br><img
     alt="missing image :("
-    src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/ccpt_install.png"
+    src="https://raw.githubusercontent.com/hpf3/ccpt/main/img/ccpt_install.png"
 /><br>
  
 ### **3. Update all packages**  
@@ -70,7 +79,7 @@ This updates all packages. If a package needs a new dependency after an update o
 *The Output should look something like this:*
 <br><img
     alt="missing image :("
-    src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/ccpt_upgrade.png"
+    src="https://raw.githubusercontent.com/hpf3/ccpt/main/img/ccpt_upgrade.png"
 /><br>
 
 ### **4. Uninstall a package**  
@@ -83,7 +92,7 @@ This uninstalles the package with the given ID and all packages that depend on s
 *The Output should look something like this:*
 <br><img
     alt="missing image :("
-    src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/ccpt_uninstall.png"
+    src="https://raw.githubusercontent.com/hpf3/ccpt/main/img/ccpt_uninstall.png"
 /><br>
 
 ### **5. Add a local/custom package**
@@ -96,7 +105,7 @@ This adds a custom package to the local list. You have to run 'ccpt update' thou
 *The Output should look something like this:*
 <br><img
     alt="missing image :("
-    src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/ccpt_add.png"
+    src="https://raw.githubusercontent.com/hpf3/ccpt/main/img/ccpt_add.png"
 /><br>
 
 ### **6. Remove a local/custom package**
@@ -109,7 +118,7 @@ This removes a custom package from the local list. You have to run 'ccpt update'
 *The Output should look something like this:*
 <br><img
     alt="missing image :("
-    src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/ccpt_remove.png"
+    src="https://raw.githubusercontent.com/hpf3/ccpt/main/img/ccpt_remove.png"
 /><br>
 
 ### **7. List all installed and able to install packages**
@@ -122,7 +131,7 @@ This lists name, their install status and wether they have availible updates of 
 *The Output should look something like this:*
 <br><img
     alt="missing image :("
-    src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/ccpt_list.png"
+    src="https://raw.githubusercontent.com/hpf3/ccpt/main/img/ccpt_list.png"
 /><br>
 
 ### **8. Get info about a specific package**
@@ -135,7 +144,7 @@ This prints name, author, description, website (if given), installation type, in
 *The Output should look something like this:*
 <br><img
     alt="missing image :("
-    src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/ccpt_info.png"
+    src="https://raw.githubusercontent.com/hpf3/ccpt/main/img/ccpt_info.png"
 /><br>
 
 ### **9. Display help**
@@ -147,7 +156,7 @@ This prints all availible actions for the 'ccpt' command.
 *The Output should look something like this:*
 <br><img
     alt="missing image :("
-    src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/ccpt_help.png"
+    src="https://raw.githubusercontent.com/hpf3/ccpt/main/img/ccpt_help.png"
 /><br>
 
 ### **10. Display current 'ccpt'-version**
@@ -159,10 +168,10 @@ This prints the installed version of ccpt.
 *The Output should look something like this:*
 <br><img
     alt="missing image :("
-    src="https://raw.githubusercontent.com/PentagonLP/ccpt/main/img/ccpt_version.png"
+    src="https://raw.githubusercontent.com/hpf3/ccpt/main/img/ccpt_version.png"
 /><br>
 ## How to create your own package
-Take a look in our Wiki: [How to create your own package](https://github.com/PentagonLP/ccpt/wiki/Create-your-own-package)
+Take a look in our Wiki: [How to create your own package](https://github.com/hpf3/ccpt/wiki/Create-your-own-package)
 ## Changelog
  Nothing here yet, we are still on 1.0 :)
 ## Last words
