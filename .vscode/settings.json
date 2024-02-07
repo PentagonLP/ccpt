@@ -26,5 +26,16 @@
         "turtle",
         "vector",
         "window"
-    ]
+    ],
+    "Lua.diagnostics.disable": [
+        "need-check-nil"
+    ],
+    "Lua.hint.setType": true,
+    "Lua.runtime.version": "Lua 5.1",
+    "Lua.diagnostics.libraryFiles": "Enable",
+    "Lua.diagnostics.severity": {
+        "unused-local": "Error"
+    },
+    "Lua.type.weakUnionCheck": true,
+    "Lua.type.weakNilCheck": true
 }

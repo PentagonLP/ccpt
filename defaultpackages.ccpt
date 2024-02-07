@@ -1,9 +1,7 @@
 {
-    packages = {
-        ccpt = "https://raw.githubusercontent.com/hpf3/ccpt/main/packageinfo.ccpt",
-        pprint = "https://raw.githubusercontent.com/hpf3/properprint/main/packageinfo.ccpt",
-		fileutils = "https://raw.githubusercontent.com/PentagonLP/fileutils/main/packageinfo.ccpt",
-		httputils = "https://raw.githubusercontent.com/PentagonLP/httputils/main/packageinfo.ccpt"
+    "packages": {
+        "ccpt": "https://raw.githubusercontent.com/hpf3/ccpt/main/packageinfo.json",
+        "pprint": "https://raw.githubusercontent.com/hpf3/properprint/main/packageinfo.json"
     },
-    ccptversion = "1.0"
+    "ccptversion": "1.0"
 }
