@@ -1,0 +1,9 @@
+{
+    packages = {
+        ccpt = "https://raw.githubusercontent.com/computercraft-package-tool/ccpt/main/packageinfo.ccpt",
+        pprint = "https://raw.githubusercontent.com/computercraft-package-tool/properprint/main/packageinfo.ccpt",
+		fileutils = "https://raw.githubusercontent.com/computercraft-package-tool/fileutils/main/packageinfo.ccpt",
+		httputils = "https://raw.githubusercontent.com/computercraft-package-tool/httputils/main/packageinfo.ccpt"
+    },
+    ccptversion = "1.0"
+}
