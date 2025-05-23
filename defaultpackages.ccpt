@@ -1,9 +1,9 @@
 {
     packages = {
-        ccpt = "https://raw.githubusercontent.com/computercraft-package-tool/ccpt/main/packageinfo.ccpt",
-        pprint = "https://raw.githubusercontent.com/computercraft-package-tool/properprint/main/packageinfo.ccpt",
-		fileutils = "https://raw.githubusercontent.com/computercraft-package-tool/fileutils/main/packageinfo.ccpt",
-		httputils = "https://raw.githubusercontent.com/computercraft-package-tool/httputils/main/packageinfo.ccpt"
+        ccpt = "https://github.com/computercraft-package-tool/ccpt/releases/latest/download/packageinfo.ccpt",
+        pprint = "https://github.com/computercraft-package-tool/properprint/releases/latest/download/packageinfo.ccpt",
+		fileutils = "https://github.com/computercraft-package-tool/fileutils/releases/latest/download/packageinfo.ccpt",
+		httputils = "https://github.com/computercraft-package-tool/httputils/releases/latest/download/packageinfo.ccpt"
     },
     ccptversion = "1.0"
 }
